@@ -1,21 +1,43 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import {Loader} from "./Loader";
+import {useMessage} from "../hooks/message.hook";
+import {useHttp} from "../hooks/http.hook";
+import {ProductsCard} from "./ProductsCard";
 
 export const Product = () => {
-    return (
-        <div className="row">
-            <div className="col s12 m4 p1">
-                <div className="card">
-                    <div className="card-image">
+    const [product, setProduct] = useState(null);
+    const message = useMessage()
+    const {loading, request, error, clearError} = useHttp()
+    const [lable, setLable] = useState('Последние добавленные товары')
+    const style = {
 
-                            <span className="card-title">Card Title</span>
-                            <a className="btn-floating halfway-fab waves-effect waves-light red"><i
-                                className="material-icons">add</i></a>
-                    </div>
-                    <div className="card-content">
-                        <p>I am a very simple card. I am good at containing small bits of information. I am convenient
-                            because I require little markup to use effectively.</p>
-                    </div>
-                </div>
+        hr_line: {
+            borderBottom: "1px solid black"
+        }
+    }
+
+    useEffect(() => {
+        message(error)
+        clearError()
+    }, [error, message, clearError])
+
+    useEffect(() => {
+        const topProdHandler = async () => {
+            try {
+                const d = await request('/api/products/topProducts', 'POST')
+                setProduct(d)
+            }catch (e) {
+            }
+        }
+        topProdHandler()
+    },[request])
+
+    return(
+        <div className="col s9">
+            <h3 style={style.hr_line}>{lable}</h3>
+            <div className="products">
+                {loading && <Loader/>}
+                {product ? product.map((items => {return <ProductsCard item={items} key={items.date}/>})) : loading ? null : "Пока товаров нет!"}
             </div>
         </div>
     )

@@ -7,7 +7,7 @@ const app = express()
 
 app.use(express.json({extended: true}))
 app.use('/api/auth', require('./routes/auth.routes'))
-app.use('/api/label', require('./routes/label.routes'))
+app.use('/api/products', require('./routes/products.routes'))
 app.use('/storage', express.static(path.join(__dirname, 'static')))
 
 if (process.env.NODE_ENV === 'production') {

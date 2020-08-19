@@ -14,7 +14,7 @@ export const Navbar = () => {
   }
 
   return (
-    <nav>
+    <nav className="z-depth-0">
       <div className="nav-wrapper grey darken-3" style={{ padding: '0 2rem' }}>
         <span className="brand-logo"><NavLink to="/">Guitar Shop</NavLink></span>
         {auth.isAuthenticated ?
