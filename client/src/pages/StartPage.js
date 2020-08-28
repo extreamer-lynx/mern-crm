@@ -1,57 +1,43 @@
-import React, {useEffect, useState} from 'react'
-import {Product} from '../components/Products'
-import {useMessage} from "../hooks/message.hook";
-import {useHttp} from "../hooks/http.hook";
+import React, {useEffect, useState} from "react";
 import {Loader} from "../components/Loader";
-import {CategoryRadio} from "../components/CategoryRadio";
+import {useMessage} from "../hooks/message.hook";
+import {ProductsCard} from "../components/ProductsCard";
 
+import {useDispatch, useSelector} from "react-redux";
+import {init} from "../store/action/productAction";
+import {Search} from "../components/Search";
 
 export const StartPage = () => {
-    const [categories, setCategories] = useState(null);
     const message = useMessage()
-    const {loading, request, error, clearError} = useHttp()
-    const style = {
-        vh_column: {
-            height: '100vh'
-        }
-    }
-
-    function handleClick(e) {
-        e.preventDefault()
-        console.log(e.target.name)
-    }
+    const lable = useSelector(state => state.appState.page)
+    const dispatch = useDispatch();
+    const loading = useSelector(state => state.appState.isLoading)
+    const product = useSelector(state => state.productState)
+    const error = useSelector(state => state.appState.error)
 
     useEffect(() => {
+        dispatch(init())
+    },[])
+
+    if (error){
         message(error)
-        clearError()
-    }, [error, message, clearError])
-
-    useEffect(() => {
-        const categoryHandler = async () => {
-            try {
-                const d = await request('/api/products/categories', 'POST')
-                setCategories(d)
-            } catch (e) {
-            }
-        }
-        categoryHandler()
-    }, [request])
+    }
 
     return (
-        <div className="row">
-            <div className="col s2 grey lighten-4 m4 l3" style={style.vh_column}>
-                <ul className={"sidenav sidenav-open"} id="slide-out">
-                    <li><h4 style={{marginBottom: "3rm"}}>Категории</h4></li>
+        <React.Fragment>
 
-                    {loading && <Loader/>}
-                    {categories ? categories.map(item => <CategoryRadio category={item}
-                                                                        key={item._id}/>) : loading ? null : "Пока категорий нет"}
-                    <li>
-                        <a href="category" className="center" name="sdf" onClick={handleClick}>localTest</a>
-                    </li>
-                </ul>
+            <div className="row">
+                <div className="col">
+                    <h4 style={{marginBottom: "3rm", margin: "3rm"}}>{lable}  <Search/></h4>
+                    <hr/>
+                    <div className="products">
+                        {loading && <Loader/>}
+                        {product ? product.map((items => {
+                            return <ProductsCard item={items} key={items.date}/>
+                        })) : loading ? null : "Пока товаров нет!"}
+                    </div>
+                </div>
             </div>
-            <Product/>
-        </div>
+        </React.Fragment>
     )
 }

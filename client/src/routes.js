@@ -1,10 +1,10 @@
 import React from 'react'
 import {Switch, Route, Redirect} from 'react-router-dom'
-import {ShopBasket} from './pages/ShopBasket'
+import ShopBasket from './pages/ShopBasket'
 import {Profile} from './pages/Profile'
-import {DetailPage} from './pages/DetailPage'
 import {AuthPage} from './pages/AuthPage'
 import {StartPage} from "./pages/StartPage";
+import {ProductDetails} from "./pages/ProductDetails";
 
 export const useRoutes = isAuthenticated => {
     if (isAuthenticated) {
@@ -17,7 +17,7 @@ export const useRoutes = isAuthenticated => {
                     <Profile/>
                 </Route>
                 <Route path="/product/:id">
-                    <DetailPage/>
+                    <ProductDetails/>
                 </Route>
                 <Route path="/">
                     <StartPage/>
@@ -34,6 +34,9 @@ export const useRoutes = isAuthenticated => {
             </Route>
             <Route path="/">
                 <StartPage/>
+            </Route>
+            <Route path="/product/:id">
+                <ProductDetails/>
             </Route>
             <Redirect to="/"/>
         </Switch>

@@ -1,34 +1,35 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react'
-import {useHttp} from '../hooks/http.hook'
-import {AuthContext} from '../context/AuthContext'
-import {Loader} from '../components/Loader'
-import {LinksList} from '../components/LinksList'
+import React, {useEffect} from 'react'
+import M from 'materialize-css/dist/js/materialize.min'
+import Basked from "../components/Basked";
+import CompletedTasks from "../components/CompletedTasks";
 
-export const ShopBasket = () => {
-  const [links, setLinks] = useState([])
-  const {loading, request} = useHttp()
-  const {token} = useContext(AuthContext)
 
-  const fetchLinks = useCallback(async () => {
-    try {
-      const fetched = await request('/api/link', 'GET', null, {
-        Authorization: `Bearer ${token}`
-      })
-      setLinks(fetched)
-    } catch (e) {}
-  }, [token, request])
+const ShopBasket = () => {
+    //dispatch(add({name:"someTov", cost:Math.random(), count: Math.random()}))
 
-  useEffect(() => {
-    fetchLinks()
-  }, [fetchLinks])
+    useEffect(() => {
+        M.Tabs.init(document.querySelectorAll('.tabs'))
+    }, [])
 
-  if (loading) {
-    return <Loader/>
-  }
-
-  return (
-    <>
-      {!loading && <LinksList links={links} />}
-    </>
-  )
+    return (
+        <div className="container">
+            <div className="row">
+                <div className="col s12">
+                    <ul className="tabs">
+                        <li className="tab col s3"><a href="#basket">Корзина</a></li>
+                        <li className="tab col s3"><a href="#completed">Заказы</a></li>
+                    </ul>
+                </div>
+                <div id="basket" className="col s12">
+                    <Basked/>
+                </div>
+                <div id="completed" className="col s12">
+                    <CompletedTasks/>
+                </div>
+            </div>
+        </div>
+    )
 }
+
+
+export default ShopBasket

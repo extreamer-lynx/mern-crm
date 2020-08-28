@@ -14,21 +14,21 @@ function App() {
     const routes = useRoutes(isAuthenticated)
 
     if (!ready) {
-        return <Loader />
+        return <Loader/>
     }
 
 
     return (
-            <AuthContext.Provider value={{
-                token, login, logout, userId, isAuthenticated
-            }}>
+        <AuthContext.Provider value={{
+            token, login, logout, userId, isAuthenticated
+        }}>
                 <Router>
                     <Navbar/>
                     <div>
                         {routes}
                     </div>
                 </Router>
-            </AuthContext.Provider>
+        </AuthContext.Provider>
     )
 }
 
