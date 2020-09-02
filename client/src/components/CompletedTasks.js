@@ -1,30 +1,42 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {connect} from "react-redux";
 
-const CompletedTasks = () => {
-    const [tasks] = useState(0)
+const CompletedTasks = ({sallesState, dispatch , appState}) => {
 
-    if(!tasks){
-        return (
-            <h4 className={"center"}>Нет выполненных заказов</h4>
-        )
-    }
+    useEffect(()=> {
+      dispatch()
+    })
 
     return (
-        <table>
-            <thead>
-            <tr>
-                <td>№</td>
-                <td>Статус</td>
-            </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>ff</td>
-                    <td>asd</td>
-                </tr>
-            </tbody>
-        </table>
+        <React.Fragment>
+            {loading ?
+                <table>
+                    <thead>
+                    <tr>
+                        <td>№</td>
+                        <td>Статус</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {sallesState.map(prod => {
+                        return (<tr>
+                            <td>{prod.date}</td>
+                            <td>{prod.status}</td>
+                        </tr>)
+                    })}
+                    </tbody>
+                </table> :
+                <h4 className={"center"}>Нет выполненных заказов</h4>
+            }
+        </React.Fragment>
     )
 }
 
-export default CompletedTasks
+const mapStateToProps = function (state) {
+    return {
+        sallesState: state.sallesState,
+        appState: state.appState
+    }
+}
+
+export default connect(mapStateToProps)(CompletedTasks);

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {Loader} from "../components/Loader";
 import {useMessage} from "../hooks/message.hook";
 import {ProductsCard} from "../components/ProductsCard";
@@ -25,7 +25,6 @@ export const StartPage = () => {
 
     return (
         <React.Fragment>
-
             <div className="row">
                 <div className="col">
                     <h4 style={{marginBottom: "3rm", margin: "3rm"}}>{lable}  <Search/></h4>

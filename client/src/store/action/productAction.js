@@ -34,3 +34,24 @@ export function byCategory() {
         type: PRODUCT_CATEGORY
     }
 }
+
+export function search() {
+    return async dispatch => {
+        try {
+            dispatch(showLoad())
+            const response = await fetch('/api/products/search', {
+                method: 'POST',
+                headers: {'Content-type': 'application/json'}
+            })
+            const json = await response.json()
+
+            dispatch(setProduct(json))
+            dispatch(hideLoad())
+
+        } catch (e) {
+            dispatch(setError(e))
+            dispatch(clearError)
+
+        }
+    }
+}

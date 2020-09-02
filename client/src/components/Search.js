@@ -7,7 +7,6 @@ export const Search = () => {
                         <label htmlFor="input_text">Поиск</label>
                         <a className="prefix material-icons">arrow_forward</a>
                     </div>
-
         </div>
     )
 }
