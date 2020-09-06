@@ -1,7 +1,7 @@
 import React from 'react'
 import {Switch, Route, Redirect} from 'react-router-dom'
 import ShopBasket from './pages/ShopBasket'
-import {Profile} from './pages/Profile'
+import Profile from './pages/Profile'
 import {AuthPage} from './pages/AuthPage'
 import {StartPage} from "./pages/StartPage";
 import {ProductDetails} from "./pages/ProductDetails";

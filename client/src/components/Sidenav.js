@@ -3,16 +3,19 @@ import React, {useEffect, useState} from "react";
 import {useMessage} from "../hooks/message.hook";
 import {useHttp} from "../hooks/http.hook";
 import M from 'materialize-css/dist/js/materialize.min'
+import {useDispatch} from "react-redux";
+import {byCategory} from "../store/action/productAction";
 
 const Sidenav = () => {
 
     const [categories, setCategories] = useState(null)
     const message = useMessage()
     const {loading, request, error, clearError} = useHttp()
+    const dispatch = useDispatch()
 
     function handleClick(e) {
         e.preventDefault()
-        console.log(e.target.name)
+        dispatch(byCategory(e.target.name))
 
     }
 
@@ -44,7 +47,7 @@ const Sidenav = () => {
                 <li><h4 style={{marginBottom: "3rm"}} className="black-text">Категории</h4></li>
                 <li><hr/></li>
                 {loading && <Loader/>}
-                {categories ? categories.map((item) => <li key={item.ruCategory}><a onClick={handleClick} href={item.category}>{item.ruCategory}</a></li>) : loading ? null : "Пока категорий нет"}>
+                {categories ? categories.map((item) => <li key={item.ruCategory}><a onClick={handleClick} name={item._id} href={item.category}>{item.ruCategory}</a></li>) : loading ? null : "Пока категорий нет"}>
             </ul>
         </React.Fragment>
     )

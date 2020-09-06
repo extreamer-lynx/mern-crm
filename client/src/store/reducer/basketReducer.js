@@ -1,6 +1,11 @@
 import {ADD_BASKED, CLEAR_BASKED, REMOVE_BASKED} from "../types";
 
 let persistedState = (localStorage.getItem('baskedState') ? JSON.parse(localStorage.getItem('baskedState')) : []);
+if (!persistedState.length)
+{
+    localStorage.setItem('baskedState', [])
+
+}
 
 export function baskedReducer(state = persistedState, action) {
     switch (action.type) {
@@ -10,7 +15,7 @@ export function baskedReducer(state = persistedState, action) {
         case REMOVE_BASKED:
             return state.filter((n) => {return n !== state[action.product]});
         case CLEAR_BASKED:
-            return {};
+            return [];
         default:
             return state;
     }

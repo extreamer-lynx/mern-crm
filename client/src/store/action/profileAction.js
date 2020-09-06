@@ -1,66 +1,59 @@
-import {SET_SALLES} from "../types";
 import {clearError, hideLoad, setError, showLoad} from "./appAction";
-import {clear} from "./basketAction";
+import {SET_PROFILE} from "../types";
 
-export function addSales(products) {
+export function setProfile(profile) {
     return {
-        type: SET_SALLES,
-        products
+        type: SET_PROFILE,
+        profile
     }
 }
 
-export function initSales() {
+
+export function getProfile() {
     return async dispatch => {
         try {
             dispatch(showLoad())
-            const response = await fetch('/api/products/getSales', {
+            const response = await fetch('/api/profile/get', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json',
                     Authorization: `Bearer ${JSON.parse(localStorage.getItem("userData")).token}`
                 }
             })
-
-            if (!response.ok) {
-                throw new Error(response.message || 'Что-то пошло не так')
-            }
-
-
             const json = await response.json()
 
-            dispatch(addSales(json))
             dispatch(hideLoad())
+            dispatch(setProfile(json))
+            dispatch(clearError())
 
         } catch (e) {
-            dispatch(setError(e.message))
-            dispatch(clearError)
-
+            dispatch(setError(e))
+            dispatch(clearError())
         }
     }
 }
 
-export function buySales(baskedState) {
+export function changeProfile(prof) {
     return async dispatch => {
         try {
             dispatch(showLoad())
-            const response = await fetch('/api/products/buy', {
+            const response = await fetch('/api/profile/change', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json',
                     Authorization: `Bearer ${JSON.parse(localStorage.getItem("userData")).token}`
                 },
-                body: JSON.stringify(baskedState)
+                body: JSON.stringify(prof)
             })
             const json = await response.json()
 
-            dispatch(clear())
-            dispatch(setError(json.message))
-            dispatch(initSales())
             dispatch(hideLoad())
+            dispatch(getProfile())
             dispatch(clearError())
 
         } catch (e) {
             dispatch(setError(e))
+            dispatch(clearError())
         }
     }
 }

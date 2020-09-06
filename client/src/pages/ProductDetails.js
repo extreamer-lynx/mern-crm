@@ -41,8 +41,8 @@ export const ProductDetails = () => {
         setBasket({...basket, [e.target.name]: e.target.value})
     }
 
-    const clickHandler = e => {
-        dispatch(add({name: product.name, cost: basket.count * product.cost, count: basket.count}))
+    const clickHandler = () => {
+        dispatch(add({name: product.name, cost: basket.count * product.cost, count: basket.count, allCount: product.count}))
         message("Товар добавлен в корзину")
     }
 

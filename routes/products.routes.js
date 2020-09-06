@@ -1,9 +1,8 @@
 const Category = require("../models/Categories")
 const Product = require("../models/Products")
 const Salles = require("../models/Salles")
-
+const auth = require("../middleware/auth.middleware")
 const {Router} = require('express')
-const {check, validationResult} = require('express-validator')
 const router = Router()
 
 router.post('/categories', async (req, res) => {
@@ -25,12 +24,12 @@ router.post('/topProducts', async (req, res) => {
 router.post('/search', async (req, res) => {
     try {
         //res.status(201).json(await Product.find({name:req.query.name}))
-       await Product.find( {name: { "$regex": req.query.name, "$options": "i" }} , function(errs, books){
+       await Product.find( {name: { "$regex": req.body.name, "$options": "i" }} , function(errs, books){
             if(errs){
-                res.status(500).send(errs);
+                return res.status(500).send(errs);
             }
 
-           res.status(201).json(books);
+           return res.status(201).json(books);
         });
     } catch (e) {
         res.status(500).json({message: 'Ошибка в запросе' + e})
@@ -45,23 +44,30 @@ router.post('/product', async (req, res) => {
     }
     })
 
-router.post('/buy', async (req, res) => {
+router.post('/buy', auth, async (req, res) => {
     try {
-        const Sale = new Salles({products: req.body.products, user: req.body.user})
+        const Sale = new Salles({products: req.body.product, user: req.user.userId})
         Sale.save();
-        res.status(201).json()
+        res.status(201).json({message: "Заказ сделан"})
     } catch (e) {
         res.status(500).json({message: 'Ошибка в выполнении запроса' + e})
     }
 })
 
-router.post('/getSales', async (req, res) => {
+router.post('/getSales', auth , async (req, res) => {
     try {
-        res.status(201).json(await Salles.find({user: req.body.id}))
+        res.status(201).json(await Salles.find({user: req.user.userId}))
     } catch (e) {
         res.status(500).json({message: 'Ошибка в запросе' + e})
     }
 })
 
+router.post('/byCategory', async (req, res) => {
+    try {
+        res.status(201).json(await Product.find({ categories: { $in: [req.body.category] }}))
+    } catch (e) {
+        res.status(500).json({message: 'Ошибка в запросе' + e})
+    }
+})
 
 module.exports = router

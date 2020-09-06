@@ -13,6 +13,7 @@ export const AuthModal = () => {
     const [form, setForm] = useState({
         email: '', password: ''
     })
+    const [regForm, setRegForm] = useState({email: '', password: '', tel: '', name: '', sName: ''})
 
     useEffect(() => {
         message(error)
@@ -25,13 +26,17 @@ export const AuthModal = () => {
         M.Modal.init(document.querySelector('#AuthModal'))
     }, [])
 
-    const changeHandler = event => {
+    const changHandler = event => {
         setForm({...form, [event.target.name]: event.target.value})
     }
 
-    const registerHandler = async () => {
+    const regHandler = event => {
+        setRegForm({...regForm, [event.target.id]: event.target.value})
+    }
+
+    const registrarHandler = async () => {
         try {
-            const data = await request('/api/auth/register', 'POST', {...form})
+            const data = await request('/api/auth/register', 'POST', {...regForm})
             message(data.message)
         } catch (e) {
         }
@@ -58,12 +63,11 @@ export const AuthModal = () => {
                     <div className="input-field">
                         <input
                             placeholder="Введите email"
-                            id="email"
                             type="text"
                             name="email"
                             className="yellow-input"
                             value={form.email}
-                            onChange={changeHandler}
+                            onChange={changHandler}
                         />
                         <label htmlFor="email">Email</label>
                     </div>
@@ -71,12 +75,11 @@ export const AuthModal = () => {
                     <div className="input-field">
                         <input
                             placeholder="Введите пароль"
-                            id="password"
                             type="password"
                             name="password"
                             className="yellow-input"
                             value={form.password}
-                            onChange={changeHandler}
+                            onChange={changHandler}
                         />
                         <label htmlFor="email">Пароль</label>
                     </div>
@@ -92,15 +95,33 @@ export const AuthModal = () => {
 
                 </div>
                 <div id="reg" className="col s12">
+                    <div className="input-field col s6">
+                        <input placeholder="Введите имя" id="name" type="text" className="validate" value={regForm.name}
+                               onChange={regHandler}/>
+                        <label htmlFor="name">Имя</label>
+                    </div>
+
+                    <div className="input-field col s6">
+                        <input placeholder="Введите фамилию" id="sName" type="text" className="validate"
+                               value={regForm.sName} onChange={regHandler}/>
+                        <label htmlFor="sName">Фамилия</label>
+                    </div>
+
+                    <div className="input-field col s6">
+                        <input placeholder="Введите номер" id="tel" type="text" className="validate" value={regForm.tel}
+                               onChange={regHandler}/>
+                        <label htmlFor="tel">Номер телефона</label>
+                    </div>
+
                     <div className="input-field">
                         <input
                             placeholder="Введите email"
                             id="email"
                             type="text"
-                            name="email"
+                            name="em"
                             className="yellow-input"
-                            value={form.email}
-                            onChange={changeHandler}
+                            value={regForm.email}
+                            onChange={regHandler}
                         />
                         <label htmlFor="email">Email</label>
                     </div>
@@ -110,17 +131,17 @@ export const AuthModal = () => {
                             placeholder="Введите пароль"
                             id="password"
                             type="password"
-                            name="password"
+                            name="pass"
                             className="yellow-input"
-                            value={form.password}
-                            onChange={changeHandler}
+                            value={regForm.password}
+                            onChange={regHandler}
                         />
                         <label htmlFor="email">Пароль</label>
                     </div>
 
                     <button
                         className="btn grey lighten-1 black-text"
-                        onClick={registerHandler}
+                        onClick={registrarHandler}
                         disabled={loading}
                     >
                         Регистрация

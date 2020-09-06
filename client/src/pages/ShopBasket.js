@@ -5,7 +5,6 @@ import CompletedTasks from "../components/CompletedTasks";
 
 
 const ShopBasket = () => {
-    //dispatch(add({name:"someTov", cost:Math.random(), count: Math.random()}))
 
     useEffect(() => {
         M.Tabs.init(document.querySelectorAll('.tabs'))

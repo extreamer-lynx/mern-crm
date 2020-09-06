@@ -13,7 +13,11 @@ router.post(
   [
     check('email', 'Некорректный email').isEmail(),
     check('password', 'Минимальная длина пароля 6 символов')
-      .isLength({ min: 6 })
+      .isLength({ min: 6 }),
+    check('tel', 'Минимальная длина номера 10 символов')
+        .isLength({ min: 10 }),
+    check('name', 'Введите имя').exists(),
+    check('sName', 'Введите фамилию').exists()
   ],
   async (req, res) => {
   try {
@@ -26,16 +30,25 @@ router.post(
       })
     }
 
-    const {email, password} = req.body
+    const {email, password, name, sName, tel} = req.body
 
     const candidate = await User.findOne({ email })
-
     if (candidate) {
       return res.status(400).json({ message: 'Такой пользователь уже существует' })
     }
 
+    const candidateName = await User.findOne({ name })
+    if (candidateName) {
+      return res.status(400).json({ message: 'Такой пользователь уже существует' })
+    }
+
+    const candidateSName = await User.findOne({ sName })
+    if (candidateSName) {
+      return res.status(400).json({ message: 'Такой пользователь уже существует' })
+    }
+
     const hashedPassword = await bcrypt.hash(password, 12)
-    const user = new User({ email, password: hashedPassword })
+    const user = new User({ email, password: hashedPassword, name, sName, tel })
 
     await user.save()
 
@@ -81,7 +94,7 @@ router.post(
     const token = jwt.sign(
       { userId: user.id },
       config.get('jwtSecret'),
-      { expiresIn: '1h' }
+      { expiresIn: '7d' }
     )
 
     res.status(201).json({ token, userId: user.id })

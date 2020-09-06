@@ -2,9 +2,10 @@ import React from 'react'
 import {remove} from "../store/action/basketAction";
 import {useMessage} from "../hooks/message.hook";
 import {connect} from "react-redux"
+import {buySales} from "../store/action/sallesAction";
 
 
-function Basked({baskedState, dispatch}) {
+function Basked({baskedState, dispatch, loading, error}) {
     const message = useMessage()
     localStorage.setItem('baskedState', JSON.stringify(baskedState))
 
@@ -20,7 +21,11 @@ function Basked({baskedState, dispatch}) {
 
     function sellHandler(e) {
         e.preventDefault()
+        dispatch(buySales(baskedState))
+        message(error)
     }
+
+
 
     return (
         <table>
@@ -37,7 +42,7 @@ function Basked({baskedState, dispatch}) {
             <tbody>
             {baskedState.map((product, index) => {
                 return (
-                    <tr key={product._id}>
+                    <tr key={index + 1}>
                         <td>{index + 1}</td>
                         <td>{product.name}</td>
                         <td>{product.count}</td>
@@ -54,7 +59,7 @@ function Basked({baskedState, dispatch}) {
                 <td>&#032;</td>
                 <td>&#032;</td>
                 <td>
-                    <a className={"btn"} href={"#send"} onClick={sellHandler}>Заказать</a>
+                    {!loading ? <a className={"btn"} href={"#send"} onClick={sellHandler}>Заказать</a> : <a className={"btn disabled"} href={"#send"}>Заказать</a>}
                 </td>
             </tr>
             </tfoot>
@@ -64,7 +69,9 @@ function Basked({baskedState, dispatch}) {
 
 const mapStateToProps = function (state) {
     return {
-        baskedState: state.baskedState
+        baskedState: state.baskedState,
+        loading: state.appState.isLoading,
+        error: state.appState.error
     }
 }
 

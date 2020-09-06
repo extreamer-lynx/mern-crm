@@ -1,4 +1,4 @@
-import {PRODUCT_CATEGORY, SET_PRODUCT} from '../types';
+import {SET_PRODUCT} from '../types';
 import {clearError, hideLoad, setError, showLoad} from "./appAction";
 
 export function setProduct(product) {
@@ -16,41 +16,72 @@ export function init() {
                 method: 'POST',
                 headers: {'Content-type': 'application/json'}
             })
+
+            if (!response.ok) {
+                throw new Error(response.message || 'Что-то пошло не так')
+            }
+
             const json = await response.json()
 
             dispatch(setProduct(json))
             dispatch(hideLoad())
 
         } catch (e) {
-            dispatch(setError(e))
-            dispatch(clearError)
+            console.log(e)
+            dispatch(setError(e.message))
+            dispatch(clearError())
 
         }
     }
 }
 
-export function byCategory() {
-    return {
-        type: PRODUCT_CATEGORY
-    }
-}
-
-export function search() {
+export function byCategory(category) {
     return async dispatch => {
         try {
             dispatch(showLoad())
-            const response = await fetch('/api/products/search', {
+            const response = await fetch('/api/products/byCategory', {
                 method: 'POST',
-                headers: {'Content-type': 'application/json'}
+                headers: {'Content-type': 'application/json'},
+                body: JSON.stringify({category})
             })
+            if (!response.ok) {
+                throw new Error(response.message || 'Что-то пошло не так')
+            }
+
             const json = await response.json()
 
             dispatch(setProduct(json))
             dispatch(hideLoad())
 
         } catch (e) {
-            dispatch(setError(e))
-            dispatch(clearError)
+            dispatch(setError(e.message))
+            dispatch(clearError())
+
+        }
+    }
+}
+
+export function searchProd(search) {
+    return async dispatch => {
+        try {
+            dispatch(showLoad())
+            const response = await fetch('/api/products/search', {
+                method: 'POST',
+                headers: {'Content-type': 'application/json'},
+                 body: JSON.stringify({name: search})
+            })
+            if (!response.ok) {
+                throw new Error(response.message || 'Что-то пошло не так')
+            }
+
+            const json = await response.json()
+
+            dispatch(setProduct(json))
+            dispatch(hideLoad())
+
+        } catch (e) {
+            dispatch(setError(e.message))
+            dispatch(clearError())
 
         }
     }
