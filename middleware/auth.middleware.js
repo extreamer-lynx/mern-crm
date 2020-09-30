@@ -14,6 +14,12 @@ module.exports = (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, config.get('jwtSecret'))
+
+    if(decoded.role !== "admin")
+    {
+      return res.status(401).json({ message: 'Недостаточно привилегий' })
+    }
+
     req.user = decoded
     next()
 

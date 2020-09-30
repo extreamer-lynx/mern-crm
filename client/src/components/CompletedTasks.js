@@ -1,7 +1,6 @@
 import React, {useEffect} from "react";
 import {connect} from "react-redux";
 import {Loader} from "../components/Loader";
-import {useMessage} from "../hooks/message.hook";
 import {initSales} from "../store/action/sallesAction";
 
 const CompletedTasks = ({sallesState, appState, dispatch}) => {

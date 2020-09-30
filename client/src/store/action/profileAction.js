@@ -47,6 +47,10 @@ export function changeProfile(prof) {
             })
             const json = await response.json()
 
+            if(!response.ok){
+                throw Error(json.message)
+            }
+
             dispatch(hideLoad())
             dispatch(getProfile())
             dispatch(clearError())

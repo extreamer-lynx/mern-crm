@@ -12,7 +12,6 @@ class Profile extends React.Component {
 
     componentDidMount(): void {
         M.Tabs.init(document.querySelectorAll('#profileTabs'))
-        console.log(this.props)
         this.props.dispatch(getProfile())
         window.M.updateTextFields()
     }

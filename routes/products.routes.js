@@ -46,7 +46,7 @@ router.post('/product', async (req, res) => {
 
 router.post('/buy', auth, async (req, res) => {
     try {
-        const Sale = new Salles({products: req.body.product, user: req.user.userId})
+        const Sale = new Salles({products: req.body, user: req.user.userId})
         Sale.save();
         res.status(201).json({message: "Заказ сделан"})
     } catch (e) {

@@ -1,11 +1,12 @@
-const {Schema, model, Types} = require('mongoose')
+const {Schema, model} = require('mongoose')
 
 const schema = new Schema({
   email: {type: String, required: true, unique: true},
   password: {type: String, required: true},
   name: String,
   sName: String,
-  tel: String
+  tel: String,
+  role: {type: String, default: "member"}
 })
 
 module.exports = model('User', schema)

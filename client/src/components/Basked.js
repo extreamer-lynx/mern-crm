@@ -21,7 +21,7 @@ function Basked({baskedState, dispatch, loading, error}) {
 
     function sellHandler(e) {
         e.preventDefault()
-        dispatch(buySales(baskedState))
+        dispatch(buySales(localStorage.getItem('baskedState')))
         message(error)
     }
 

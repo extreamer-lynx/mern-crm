@@ -2,13 +2,18 @@ const express = require('express')
 const config = require('config')
 const path = require('path')
 const mongoose = require('mongoose')
+var bodyParser = require('body-parser');
+
 
 const app = express()
 
-app.use(express.json({extended: true}))
+
+app.use(bodyParser.json({extended: true}))
+app.use(bodyParser.urlencoded());
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/products', require('./routes/products.routes'))
 app.use('/api/profile', require('./routes/profile.routes'))
+app.use('/api/admin', require('./routes/admin.routes'))
 app.use('/storage', express.static(path.join(__dirname, 'static')))
 
 if (process.env.NODE_ENV === 'production') {

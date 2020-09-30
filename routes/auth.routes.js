@@ -37,13 +37,8 @@ router.post(
       return res.status(400).json({ message: 'Такой пользователь уже существует' })
     }
 
-    const candidateName = await User.findOne({ name })
+    const candidateName = await User.findOne({ name, sName })
     if (candidateName) {
-      return res.status(400).json({ message: 'Такой пользователь уже существует' })
-    }
-
-    const candidateSName = await User.findOne({ sName })
-    if (candidateSName) {
       return res.status(400).json({ message: 'Такой пользователь уже существует' })
     }
 
@@ -92,7 +87,7 @@ router.post(
     }
 
     const token = jwt.sign(
-      { userId: user.id },
+      { userId: user.id, role: user.role },
       config.get('jwtSecret'),
       { expiresIn: '7d' }
     )
